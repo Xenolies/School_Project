@@ -2,7 +2,7 @@ spring:
   application:
     name: BootProjectApplication
   datasource:
-    url: jdbc:mysql://111.67.194.231:3306/thepalacemuseum?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://111.67.194.231:3306/school?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 510609
