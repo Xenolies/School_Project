@@ -103,6 +103,7 @@ public class UserController {
 //        HttpSession session = request.getSession();
 //        if (session.getAttribute("captcha").toString().equals(captcha)) {
             // 验证码正确, 接着查用户
+            // 查询用户是否存在,不存在直接抛出
             Integer integer = userservice.userLoginAuth(users);
             if (integer > 0) {
                 return userservice.selectUserInfo(users.getUserId());
