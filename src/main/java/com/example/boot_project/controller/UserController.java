@@ -25,10 +25,13 @@ public class UserController {
         StudentInfo studentInfo1 = userservice.selectStudentInfo(studentInfoDto1);
         if (studentInfo1==null){
             integer = userservice.insertStudentInfo(studentInfoDto1);
+            if (integer!=0){
+                StudentInfo studentInfo = userservice.selectStudentInfo(studentInfoDto1);
+                return studentInfo;
+            }
         }
-        if (integer!=0){
-            StudentInfo studentInfo = userservice.selectStudentInfo(studentInfoDto1);
-            return studentInfo;
+        if (studentInfo1!=null){
+            return studentInfo1;
         }else {
          return null;   //Todo 后续改为抛出添加错误
         }
