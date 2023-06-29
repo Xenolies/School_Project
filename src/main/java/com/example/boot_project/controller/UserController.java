@@ -36,4 +36,10 @@ public class UserController {
          return null;   //Todo 后续改为抛出添加错误
         }
     }
+
+    @ApiOperation("查询用户个人信息接口")
+    @GetMapping("/user/personalInformation")
+    public void SelectPersonalInformation(@PathVariable Long UserId){
+
+    }
 }

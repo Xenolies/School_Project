@@ -28,7 +28,7 @@ public class helper {
         String string = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String code = "" ;
         for (int i = 0; i < 5; i++) {
-            int a = yzm.nextInt(string.length()-1); //随机生成0-57之间的数，提供索引位置
+            int a = yzm.nextInt(string.length()-1); //随机生成随机数，提供索引位置
             code += string.charAt(a);//用get 和提供的索引找到相应位置的数据给变量
         }
         return code;
