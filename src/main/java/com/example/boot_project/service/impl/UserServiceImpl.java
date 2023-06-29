@@ -1,18 +1,17 @@
 package com.example.boot_project.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.boot_project.mapper.StudentInfoDtoMapper;
-import com.example.boot_project.mapper.StudentInfoMapper;
-import com.example.boot_project.mapper.UsersMapper;
-import com.example.boot_project.pojo.StudentInfo;
-import com.example.boot_project.pojo.StudentInfoDto;
-import com.example.boot_project.pojo.Users;
+import com.example.boot_project.mapper.*;
+import com.example.boot_project.pojo.*;
 import com.example.boot_project.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class UserServiceImpl extends ServiceImpl<UsersMapper, Users> implements UserService {
@@ -20,6 +19,10 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users> implements 
     StudentInfoMapper studentInfoMapper;
     @Autowired
     StudentInfoDtoMapper studentInfoDtoMapper;
+    @Autowired
+    DepartmentMapper departmentMapper;
+    @Autowired
+    SchoolInfoMapper schoolInfoMapper;
     @Override
     public StudentInfoDto selectStudentInfoDto(Long strNumber) {
         LambdaQueryWrapper<StudentInfoDto> wrapper = new LambdaQueryWrapper<>();
@@ -59,6 +62,39 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users> implements 
         LambdaQueryWrapper<StudentInfo> eq = studentInfoLambdaQueryWrapper.eq(StudentInfo::getStrNumber, strNumber);
             StudentInfo studentInfo = studentInfoMapper.selectOne(eq);
             return studentInfo;
+    }
+
+    @Override
+    public List<SchoolInfo> selectSchool() {
+        List<SchoolInfo> schoolInfos = schoolInfoMapper.selectList(null);
+        return schoolInfos;
+    }
+
+    @Override
+    public List<Department> selectDepartment() {
+        List<Department> departments = departmentMapper.selectList(null);
+        return departments;
+    }
+
+    @Override
+    public Integer updateStudentInfo(UpdateStudentInfo updateStudentInfo) {
+
+        long strNumber = updateStudentInfo.getStrNumber();
+
+        LambdaQueryWrapper<StudentInfo> queryWrapper = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<StudentInfo> eq = queryWrapper.eq(StudentInfo::getStrNumber, strNumber);
+        StudentInfo studentInfo = studentInfoMapper.selectOne(eq);
+        BeanUtils.copyProperties(updateStudentInfo,studentInfo);
+        int update = studentInfoMapper.update(studentInfo,eq);
+        return update;
+    }
+
+    @Override
+    public StudentInfo selectUserInfo(String userId) {
+        LambdaQueryWrapper<StudentInfo> queryWrapper = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<StudentInfo> eq = queryWrapper.eq(StudentInfo::getStrAttestId, userId);
+        StudentInfo studentInfo = studentInfoMapper.selectOne(eq);
+        return studentInfo;
     }
 
 
