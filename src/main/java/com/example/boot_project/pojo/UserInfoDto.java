@@ -1,5 +1,6 @@
 package com.example.boot_project.pojo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -17,5 +18,5 @@ public class UserInfoDto {
     private int sex;
     private String userName;
     private String userId;
-    private int queryId;
+    private String Id;
 }

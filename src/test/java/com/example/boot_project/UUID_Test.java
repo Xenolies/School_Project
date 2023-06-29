@@ -16,10 +16,9 @@ public class UUID_Test {
 
     @Test
     public void UUID_TEST(){
-        UUID uuid = UUID.randomUUID();
-        System.out.println(uuid.toString());
-        UUID uuid2 = UUID.nameUUIDFromBytes("HELLO".getBytes());
-        System.out.println(uuid2.toString());
+        for (int i = 0; i < 10; i++) {
+            System.out.println(UUID.randomUUID().toString());
+        }
     }
 
     @Test
