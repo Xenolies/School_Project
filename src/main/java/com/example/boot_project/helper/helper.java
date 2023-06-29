@@ -16,14 +16,14 @@ import java.util.UUID;
 public class helper {
 
     // GenerateUUID 生成UUID
-    public String GenerateUUID(){
+    public static String GenerateUUID(){
         UUID uuid = UUID.nameUUIDFromBytes("School_project".getBytes());
         return uuid.toString();
     }
 
 
     // RandCode 验证码生成
-    public String RandCode() {
+    public static String RandCode() {
         Random yzm = new Random();
         String string = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String code = "" ;
