@@ -1,8 +1,8 @@
 package com.example.boot_project.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.boot_project.helper.helper;
 import com.example.boot_project.mapper.*;
 import com.example.boot_project.pojo.*;
 import com.example.boot_project.service.UserService;
@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @Service
@@ -23,6 +24,12 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users> implements 
     DepartmentMapper departmentMapper;
     @Autowired
     SchoolInfoMapper schoolInfoMapper;
+
+    @Resource
+    UsersMapper usersMapper;
+
+    @Resource
+    UserInfoDtoMapper userInfoDtoMapper;
     @Override
     public StudentInfoDto selectStudentInfoDto(Long strNumber) {
         LambdaQueryWrapper<StudentInfoDto> wrapper = new LambdaQueryWrapper<>();
@@ -95,6 +102,32 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users> implements 
         LambdaQueryWrapper<StudentInfo> eq = queryWrapper.eq(StudentInfo::getStrAttestId, userId);
         StudentInfo studentInfo = studentInfoMapper.selectOne(eq);
         return studentInfo;
+    }
+
+    @Override
+    // selectUserInfo 查询用户个人信息
+    public UserInfoDto selectUserInfoDto(long Id) {
+        // 创建查询的 LambdaQueryWrapper 对象
+        LambdaQueryWrapper<UserInfoDto> usersLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<UserInfoDto> eq = usersLambdaQueryWrapper.eq(UserInfoDto::getId, Id);
+        // TODO: 这里需要修改成专美查询 UserInfoDtoQuery 的
+//        BeanUtils.copyProperties(UserInfoDtoQuery,UserInfoDto);
+        if (eq == null) {
+            return null; //TODO: 这里需要改为抛出异常用来提醒数据库中没有改用户 ID
+        } else {
+            // 查询结构不为空则返回 Users 对象
+            return userInfoDtoMapper.selectOne(eq);
+        }
+    }
+
+
+    @Override
+    // 用户登录
+    @Transactional
+    public Integer userLoginAuth(Users user) {
+        String uuid = helper.GenerateUUID();
+        user.setUserId(uuid);
+        return usersMapper.insert(user);
     }
 
 

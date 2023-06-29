@@ -2,7 +2,6 @@ package com.example.boot_project.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.boot_project.pojo.*;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -13,5 +12,10 @@ public interface UserService extends IService<Users> {
     public List<SchoolInfo> selectSchool();
     public List<Department> selectDepartment();
     public Integer updateStudentInfo(UpdateStudentInfo updateStudentInfo);
+
     public StudentInfo selectUserInfo(String userId);
+
+    public UserInfoDto selectUserInfoDto(long Id);
+
+    public Integer userLoginAuth(Users user);
 }
