@@ -10,4 +10,6 @@ public interface UserService extends IService<Users> {
     public StudentInfoDto selectStudentInfoDto(Long strNumber);
     public Integer insertStudentInfo(StudentInfoDto studentInfoDto);
     public StudentInfo selectStudentInfo(StudentInfoDto studentInfoDto);
+    public Users selectUserInfo(String userId);
+    public Integer userLoginAuth(Users user);
 }

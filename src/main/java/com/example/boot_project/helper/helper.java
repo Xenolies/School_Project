@@ -17,7 +17,7 @@ public class helper {
 
     // GenerateUUID 生成UUID
     public static String GenerateUUID(){
-        UUID uuid = UUID.nameUUIDFromBytes("School_project".getBytes());
+        UUID uuid = UUID.randomUUID();
         return uuid.toString();
     }
 
@@ -34,5 +34,6 @@ public class helper {
         return code;
     }
 
-    //
+    // 生成用户Token
+
 }
