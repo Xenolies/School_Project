@@ -37,9 +37,30 @@ public class UserController {
         }
     }
 
-    @ApiOperation("查询用户个人信息接口")
-    @GetMapping("/user/personalInformation")
+    @ApiOperation("查询用户个人信息")
+    @GetMapping("/user/personalInformation/{UserId}")
+    //TODO: 查询用户详情包括信息和数据,需要完成
     public void SelectPersonalInformation(@PathVariable Long UserId){
+
+    }
+
+    @ApiOperation("关注取关用户")
+    @PostMapping("/fans/addFollow")
+    //TODO: 关注取关用户,需要完成
+    public void FansFollow(){
+
+    }
+
+    @ApiOperation("用户登录")
+    @PostMapping("/account/auth")
+    //TODO: 用户登录,需要完成
+    public void UserLogin(){
+
+    }
+
+    @ApiOperation("模糊查询自己的粉丝和关注")
+    @GetMapping("/fans/query/{UserId}")
+    public void FansSearch(@PathVariable Long UserId){
 
     }
 }
