@@ -3,6 +3,7 @@ package com.example.boot_project.controller;
 import com.example.boot_project.helper.helper;
 import com.example.boot_project.pojo.StudentInfo;
 import com.example.boot_project.pojo.StudentInfoDto;
+import com.example.boot_project.pojo.Users;
 import com.example.boot_project.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -43,9 +44,16 @@ public class UserController {
     }
 
     @ApiOperation(" 查询用户个人信息 ")
-    @GetMapping("/user/personalInformation/{UserId}")
+    @GetMapping("/personalInformation/{UserId}")
     //TODO: 查询用户详情包括信息和数据, 需要完成
-    public void SelectPersonalInformation(@PathVariable Long UserId) {
+    public Users GetPersonalInformation(@PathVariable String UserId) {
+        return userservice.selectUserInfo(UserId);
+    }
+
+    @ApiOperation(" 查询用户个人数据 ")
+    @GetMapping("/num/{UserId}")
+    //TODO: 获取用户个人数据
+    public void GetUserNum(@PathVariable Long UserId) {
 
     }
 
@@ -56,22 +64,54 @@ public class UserController {
 
     }
 
+//    type Demo struct {
+//        Success bool   `json:"success"`
+//        Code    int    `json:"code"`
+//        Message string `json:"message"`
+//        Data    struct {
+//            User struct {
+//                UserId      string      `json:"userId"`
+//                Id          int         `json:"id"`
+//                UserName    string      `json:"userName"`
+//                ClassId     interface{} `json:"classId"`
+//                PhoneNumber string      `json:"phoneNumber"`
+//                FansNum     int         `json:"fansNum"`
+//                Sex         string      `json:"sex"`
+//                IsDeleted   string      `json:"isDeleted"`
+//                Avatar      interface{} `json:"avatar"`
+//                Signature   string      `json:"signature"`
+//                CreateTime  string      `json:"createTime"`
+//                UpdateTime  string      `json:"updateTime"`
+//                Token       string      `json:"token"`
+//                Badge       interface{} `json:"badge"`
+//            } `json:"user"`
+//        } `json:"data"`
+//    }
+
+
     @ApiOperation(" 用户登录 ")
     @PostMapping("/account/auth")
     //TODO: 用户登录, 需要完成
-    public void UserLogin(@RequestBody Map<String, String> params,HttpServletRequest  request) {
-        String email = params.get("email");
-        String password = params.get("password");
-        String captcha = params.get("captcha");
-        HttpSession session = request.getSession();
-        if (session.getAttribute("captcha").toString().equals(captcha)) {
-            System.out.println();
-        }else {
-            return;
-        }
-
-
-
+    public Users UserLogin(@RequestBody Users users, HttpServletRequest request) {
+        // 这里按照需求需要获取到用户全部数据,这里做个示范,就获取了几个数据
+//        Users users = new Users();
+//        long id = Long.parseLong(params.get("id"));
+//        String userName = params.get("userName");
+//        String captcha = params.get("captcha");
+//        users.setId(id);
+//        users.setUserName(userName);
+//        HttpSession session = request.getSession();
+//        if (session.getAttribute("captcha").toString().equals(captcha)) {
+            // 验证码正确, 接着查用户
+            Integer integer = userservice.userLoginAuth(users);
+            if (integer > 0) {
+                return userservice.selectUserInfo(users.getUserId());
+            } else {
+                return null;//Todo 后续改为抛出添加错误
+            }
+//        } else {
+//            return null; //Todo 后续改为抛出添加错误
+//        }
     }
 
     @ApiOperation(" 获取验证码 ")

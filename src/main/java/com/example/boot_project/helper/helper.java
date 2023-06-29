@@ -34,5 +34,6 @@ public class helper {
         return code;
     }
 
-    //
+    // 生成用户Token
+
 }
