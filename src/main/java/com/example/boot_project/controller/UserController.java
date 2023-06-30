@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -89,10 +90,21 @@ public class UserController {
         return userservice.selectUserData(UserId);
     }
 
-    @ApiOperation(" 关注取关用户 ")
-    @PostMapping("/fans/addFollow")
+    @ApiOperation(" 关注用户接口 ")
+    @PostMapping("/fans/addFollow/")
     //TODO: 关注取关用户, 需要完成
-    public void FansFollow() {
+    public void FansFollow(@RequestBody Map<String,String> params) {
+        String followUserId = params.get("followUserId"); // 欲关注的UserId
+        userservice.UserFollow(followUserId);
+
+    }
+
+    @ApiOperation(" 取关用户接口 ")
+    @PostMapping("/fans/Unfollow/")
+    //TODO: 关注取关用户, 需要完成
+    public void FansUnfollow(@RequestBody Map<String,String> params) {
+        String unfollowUserId = params.get("UnfollowUserId"); // 欲关注的UserId
+        userservice.UserUnfollow(unfollowUserId);
 
     }
 

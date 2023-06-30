@@ -132,7 +132,7 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users> implements 
 
     @Override
     // 用户登录
-    @Transactional
+    @Transactional  // 开启事务
     public Integer userLoginAuth(Users user) {
         String uuid = helper.GenerateUUID();
         user.setUserId(uuid);
@@ -147,8 +147,6 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users> implements 
         LambdaQueryWrapper<Users> eq = usersLambdaQueryWrapper.eq(Users::getUserId, userId);
         UserDataDto userDataDto = new UserDataDto();
         // 将用户表中查询到的关注数和粉丝数 BeanUtils.copyProperties 到 UserDataDto
-
-        System.out.println(usersMapper.selectOne(eq).toString());
         BeanUtils.copyProperties(usersMapper.selectOne(eq),userDataDto );
 //        BeanUtils.copyProperties(usersMapper.selectOne(eq), userDataDto);
         // 查询计算文章数量
@@ -160,6 +158,18 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users> implements 
         BeanUtils.copyProperties(userDataDto, userData);
         userData.setArticleNum(ArticleNum);
         return userData;
+    }
+
+    @Override
+    @Transactional  // 开启事务
+    public void UserFollow(String userId) {
+
+    }
+
+    @Override
+    @Transactional  // 开启事务
+    public void UserUnfollow(String userId) {
+
     }
 
 
