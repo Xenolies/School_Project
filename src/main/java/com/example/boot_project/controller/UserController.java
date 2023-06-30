@@ -82,11 +82,11 @@ public class UserController {
         return userInfoDtoQuery;
     }
 
-    @ApiOperation(" 查询用户个人数据 ")
-    @GetMapping("/num/{Id}")
+    @ApiOperation(" 查询用户个人数据(关注数,粉丝数,文章数) ")
+    @GetMapping("/num/{UserId}")
     //TODO: 获取用户个人数据
-    public void GetUserNum(@PathVariable Long UserId) {
-
+    public UserData GetUserNum(@PathVariable String UserId) {
+        return userservice.selectUserData(UserId);
     }
 
     @ApiOperation(" 关注取关用户 ")
@@ -96,29 +96,6 @@ public class UserController {
 
     }
 
-//    type Demo struct {
-//        Success bool   `json:"success"`
-//        Code    int    `json:"code"`
-//        Message string `json:"message"`
-//        Data    struct {
-//            User struct {
-//                UserId      string      `json:"userId"`
-//                Id          int         `json:"id"`
-//                UserName    string      `json:"userName"`
-//                ClassId     interface{} `json:"classId"`
-//                PhoneNumber string      `json:"phoneNumber"`
-//                FansNum     int         `json:"fansNum"`
-//                Sex         string      `json:"sex"`
-//                IsDeleted   string      `json:"isDeleted"`
-//                Avatar      interface{} `json:"avatar"`
-//                Signature   string      `json:"signature"`
-//                CreateTime  string      `json:"createTime"`
-//                UpdateTime  string      `json:"updateTime"`
-//                Token       string      `json:"token"`
-//                Badge       interface{} `json:"badge"`
-//            } `json:"user"`
-//        } `json:"data"`
-//    }
 
 
     @ApiOperation(" 用户登录 ")

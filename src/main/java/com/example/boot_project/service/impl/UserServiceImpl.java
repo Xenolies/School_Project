@@ -24,12 +24,17 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users> implements 
     DepartmentMapper departmentMapper;
     @Autowired
     SchoolInfoMapper schoolInfoMapper;
-
     @Resource
     UsersMapper usersMapper;
-
     @Resource
     UserInfoDtoMapper userInfoDtoMapper;
+
+    @Resource
+    UserDataDotMapper userDataDotMapper;
+
+    @Resource
+    ArticleUserMapper articleUserMapper;
+
 
     @Override
     public StudentInfoDto selectStudentInfoDto(Long strNumber) {
@@ -132,6 +137,29 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users> implements 
         String uuid = helper.GenerateUUID();
         user.setUserId(uuid);
         return usersMapper.insert(user);
+    }
+
+    @Override
+    public UserData selectUserData(String userId) {
+        // 创建查询的 LambdaQueryWrapper 对象
+        // 查询出来粉丝数和关注数
+        LambdaQueryWrapper<Users> usersLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<Users> eq = usersLambdaQueryWrapper.eq(Users::getUserId, userId);
+        UserDataDto userDataDto = new UserDataDto();
+        // 将用户表中查询到的关注数和粉丝数 BeanUtils.copyProperties 到 UserDataDto
+
+        System.out.println(usersMapper.selectOne(eq).toString());
+        BeanUtils.copyProperties(usersMapper.selectOne(eq),userDataDto );
+//        BeanUtils.copyProperties(usersMapper.selectOne(eq), userDataDto);
+        // 查询计算文章数量
+        LambdaQueryWrapper<ArticleUser> articleUserLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<ArticleUser> eq1 = articleUserLambdaQueryWrapper.eq(ArticleUser::getUserId, userId);
+        Integer ArticleNum = articleUserMapper.selectCount(eq1);  // 文章数量
+        // 整合
+        UserData userData = new UserData();
+        BeanUtils.copyProperties(userDataDto, userData);
+        userData.setArticleNum(ArticleNum);
+        return userData;
     }
 
 
