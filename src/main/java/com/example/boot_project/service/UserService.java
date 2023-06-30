@@ -15,7 +15,7 @@ public interface UserService extends IService<Users> {
 
     public StudentInfo selectUserInfo(String userId);
 
-    public UserInfoDto selectUserInfoDto(long Id);
+    public UserInfoDtoQuery selectUserInfoDto(long Id);
 
     public Integer userLoginAuth(Users user);
 }

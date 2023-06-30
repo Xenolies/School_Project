@@ -1,6 +1,5 @@
 package com.example.boot_project.pojo;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -11,12 +10,12 @@ import lombok.Data;
  */
 
 @Data
-@TableName("Users")
-public class UserInfoDto {
+@TableName("users")
+public class UserInfoDto extends GlobalResponse {
     private String phoneNumber;
-    private String signature;
-    private int sex;
-    private String userName;
     private String userId;
-    private String Id;
+    private String userName;
+    private String signature;
+    private long sex;
+    private long id;
 }

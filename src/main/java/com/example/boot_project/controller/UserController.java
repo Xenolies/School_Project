@@ -73,8 +73,13 @@ public class UserController {
     @ApiOperation(" 查询用户个人信息 ")
     @GetMapping("/personalInformation/{Id}")
     //TODO: 查询用户详情包括信息和数据, 需要完成
-    public UserInfoDto GetPersonalInformation(@PathVariable Long Id) {
-        return userservice.selectUserInfoDto(Id);
+    public UserInfoDtoQuery GetPersonalInformation(@PathVariable long Id) {
+        UserInfoDtoQuery userInfoDtoQuery = userservice.selectUserInfoDto(Id);
+        // 设置响应信息
+        userInfoDtoQuery.setSuccess(true);
+        userInfoDtoQuery.setCode(200);
+        userInfoDtoQuery.setMessage("");
+        return userInfoDtoQuery;
     }
 
     @ApiOperation(" 查询用户个人数据 ")

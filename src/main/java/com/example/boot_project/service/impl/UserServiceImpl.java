@@ -30,12 +30,13 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users> implements 
 
     @Resource
     UserInfoDtoMapper userInfoDtoMapper;
+
     @Override
     public StudentInfoDto selectStudentInfoDto(Long strNumber) {
         LambdaQueryWrapper<StudentInfoDto> wrapper = new LambdaQueryWrapper<>();
         LambdaQueryWrapper<StudentInfoDto> eq1 = wrapper.eq(StudentInfoDto::getStrNumber, strNumber);
         StudentInfoDto studentInfoDto = studentInfoDtoMapper.selectOne(eq1);
-        if (studentInfoDto==null){
+        if (studentInfoDto == null) {
             return null; //Todo 后续改为学号错误或学生信息不存在
         }
         String department = studentInfoDto.getDepartment();
@@ -45,8 +46,8 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users> implements 
         LambdaQueryWrapper<StudentInfoDto> eq = queryWrapper.eq(StudentInfoDto::getSchool, school)
                 .eq(StudentInfoDto::getDepartment, department)
                 .eq(StudentInfoDto::getStrName, strName);
-        if (eq==null){
-           return  null;//Todo 后续改为抛出认证信息错误异常
+        if (eq == null) {
+            return null;//Todo 后续改为抛出认证信息错误异常
         }
         return studentInfoDto;
     }
@@ -54,10 +55,10 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users> implements 
     @Override
     @Transactional
     public Integer insertStudentInfo(StudentInfoDto studentInfoDto) {
-        //没法直接添加所以考虑使用BeanUtils的copy
-        //1.生成StudentInfo对象
+        // 没法直接添加所以考虑使用 BeanUtils 的 copy
+        //1. 生成 StudentInfo 对象
         StudentInfo studentInfo = new StudentInfo();
-        BeanUtils.copyProperties(studentInfoDto,studentInfo);
+        BeanUtils.copyProperties(studentInfoDto, studentInfo);
         int insert = studentInfoMapper.insert(studentInfo);
         return insert;
     }
@@ -67,8 +68,8 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users> implements 
         long strNumber = studentInfoDto.getStrNumber();
         LambdaQueryWrapper<StudentInfo> studentInfoLambdaQueryWrapper = new LambdaQueryWrapper<>();
         LambdaQueryWrapper<StudentInfo> eq = studentInfoLambdaQueryWrapper.eq(StudentInfo::getStrNumber, strNumber);
-            StudentInfo studentInfo = studentInfoMapper.selectOne(eq);
-            return studentInfo;
+        StudentInfo studentInfo = studentInfoMapper.selectOne(eq);
+        return studentInfo;
     }
 
     @Override
@@ -91,8 +92,8 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users> implements 
         LambdaQueryWrapper<StudentInfo> queryWrapper = new LambdaQueryWrapper<>();
         LambdaQueryWrapper<StudentInfo> eq = queryWrapper.eq(StudentInfo::getStrNumber, strNumber);
         StudentInfo studentInfo = studentInfoMapper.selectOne(eq);
-        BeanUtils.copyProperties(updateStudentInfo,studentInfo);
-        int update = studentInfoMapper.update(studentInfo,eq);
+        BeanUtils.copyProperties(updateStudentInfo, studentInfo);
+        int update = studentInfoMapper.update(studentInfo, eq);
         return update;
     }
 
@@ -106,17 +107,20 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users> implements 
 
     @Override
     // selectUserInfo 查询用户个人信息
-    public UserInfoDto selectUserInfoDto(long Id) {
+    public UserInfoDtoQuery selectUserInfoDto(long Id) {
         // 创建查询的 LambdaQueryWrapper 对象
         LambdaQueryWrapper<UserInfoDto> usersLambdaQueryWrapper = new LambdaQueryWrapper<>();
         LambdaQueryWrapper<UserInfoDto> eq = usersLambdaQueryWrapper.eq(UserInfoDto::getId, Id);
-        // TODO: 这里需要修改成专美查询 UserInfoDtoQuery 的
-//        BeanUtils.copyProperties(UserInfoDtoQuery,UserInfoDto);
+        UserInfoDtoQuery userInfoDtoQuery = new UserInfoDtoQuery();
+        // 将 UserInfoDto 中的复制到 UserInfoDtoQuery
+        BeanUtils.copyProperties(userInfoDtoMapper.selectOne(eq), userInfoDtoQuery);
+        // 添加 UserInfoDtoQuery 中的 QueryId
+        userInfoDtoQuery.setQueryId(Id);
         if (eq == null) {
             return null; //TODO: 这里需要改为抛出异常用来提醒数据库中没有改用户 ID
         } else {
             // 查询结构不为空则返回 Users 对象
-            return userInfoDtoMapper.selectOne(eq);
+            return userInfoDtoQuery;
         }
     }
 
