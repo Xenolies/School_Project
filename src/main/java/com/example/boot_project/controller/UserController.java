@@ -1,5 +1,10 @@
 package com.example.boot_project.controller;
 
+import com.auth0.jwt.exceptions.AlgorithmMismatchException;
+import com.auth0.jwt.exceptions.SignatureVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.example.boot_project.helper.JWTUtils;
 import com.example.boot_project.helper.helper;
 import com.example.boot_project.pojo.*;
 import com.example.boot_project.service.UserService;
@@ -11,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -77,9 +83,6 @@ public class UserController {
     public UserInfoDtoQuery GetPersonalInformation(@PathVariable long Id) {
         UserInfoDtoQuery userInfoDtoQuery = userservice.selectUserInfoDto(Id);
         // 设置响应信息
-        userInfoDtoQuery.setSuccess(true);
-        userInfoDtoQuery.setCode(200);
-        userInfoDtoQuery.setMessage("");
         return userInfoDtoQuery;
     }
 
@@ -151,4 +154,41 @@ public class UserController {
 
     }
 
+    @ApiOperation("token接口")
+    @GetMapping("/login")
+    public Map<String,Object> login(User user){
+        Map<String,Object> map = new HashMap<>();
+        try {
+            User login = userservice.Login(user);
+            Map<String, String> payload = new HashMap<>();
+            payload.put("userid",login.getUserId());
+            payload.put("name",login.getUserName());
+            payload.put("id",login.getId().toString());
+            String token = JWTUtils.getToken(payload);
+            map.put("state",true);
+            map.put("msg","认证成功！");
+            map.put("token",token);  // 响应token
+        }catch (Exception e){
+            map.put("state",false);
+            map.put("msg",e.getMessage());
+        }
+        return map;
+    }
+
+    @ApiOperation("token解析接口")
+    @PostMapping("/parse")
+  public Map<String,Object> parse(HttpServletRequest request){
+        Map<String, Object> map = new HashMap<>();
+        // 验证令牌  交给拦截器去做
+        // 只需要在这里处理自己的业务逻辑
+        String token = request.getHeader("token");
+        DecodedJWT verify = JWTUtils.verify(token);
+        log.info("用户id：[{}]",verify.getClaim("id").asString());
+        log.info("用户userid：[{}]",verify.getClaim("userid").asString());
+        log.info("用户name：[{}]",verify.getClaim("name").asString());
+        map.put("look",verify.getClaim("name"));
+        map.put("state", true);
+        map.put("msg", "请求成功");
+        return map;
+    }
 }

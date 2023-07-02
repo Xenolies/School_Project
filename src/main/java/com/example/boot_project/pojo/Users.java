@@ -1,23 +1,41 @@
 package com.example.boot_project.pojo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 @Data
 public class Users {
-
-  private String userId;  // 用户唯一字段
-  private long id; // user的ID
-  private String userName; // 用户名
-  private String classId; //
-  private String phoneNumber; // 手机号
-  private String signature; // 简介
-  private long fansNum; // 粉丝数
-  private long sex; //性别
-  private String avatar; // 头像路径
-  private long createTime; // 创建时间
-  private long updateTime; // 更新时间
-  private String fansState; //
+  @TableId("userId")
+  private String userId;
+  private long id;
+  @TableField("userName")
+  private String userName;
+  @TableField("classId")
+  private String classId;
+  @TableField("phoneNumber")
+  private String phoneNumber;
+  @TableField("signature")
+  private String signature;
+  @TableField("fansNum")
+  private long fansNum;
+  @TableField("sex")
+  private long sex;
+  @TableField("avatar")
+  private String avatar;
+  @TableField("createTime")
+  private long createTime;
+  @TableField("updateTime")
+  private long updateTime;
+  @TableField("fansState")
+  private String fansState;
+  @TableField("userIdentity")
   private String userIdentity;
-  private long mutualConcern; // 关注数
-  private long badge;  // 徽章
+  @TableField("mutualConcern")
+  private long mutualConcern;
+  @TableField("badge")
+  private long badge;
+
+
+
 }

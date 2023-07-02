@@ -11,7 +11,7 @@ import lombok.Data;
 
 @Data
 @TableName("users")
-public class UserInfoDto extends GlobalResponse {
+public class UserInfoDto {
     private String phoneNumber;
     private String userId;
     private String userName;

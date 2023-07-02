@@ -1,0 +1,4 @@
+POST http://localhost:822/oauth/token?grant_type=authorization_code&code=zgM2Ly&redirect_uri=http://www.baidu.com&client_id=MyProject&scope=all&client_secret=MyProject_123
+
+
+

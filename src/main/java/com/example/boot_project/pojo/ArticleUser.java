@@ -1,19 +1,21 @@
 package com.example.boot_project.pojo;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 @Data
-@TableName("article_user")
 public class ArticleUser {
 
   private String articleId;
   @TableField("user_id")
   private String userId;
+  @TableField("like_status")
   private long likeStatus;
+  @TableField("fans_state")
   private long fansState;
+  @TableField("private_state")
   private String privateState;
+  @TableField("mutual_concern")
   private long mutualConcern;
 
 }

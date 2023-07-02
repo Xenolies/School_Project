@@ -24,8 +24,10 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users> implements 
     DepartmentMapper departmentMapper;
     @Autowired
     SchoolInfoMapper schoolInfoMapper;
+
     @Resource
     UsersMapper usersMapper;
+
     @Resource
     UserInfoDtoMapper userInfoDtoMapper;
 
@@ -35,13 +37,12 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users> implements 
     @Resource
     ArticleUserMapper articleUserMapper;
 
-
     @Override
     public StudentInfoDto selectStudentInfoDto(Long strNumber) {
         LambdaQueryWrapper<StudentInfoDto> wrapper = new LambdaQueryWrapper<>();
         LambdaQueryWrapper<StudentInfoDto> eq1 = wrapper.eq(StudentInfoDto::getStrNumber, strNumber);
         StudentInfoDto studentInfoDto = studentInfoDtoMapper.selectOne(eq1);
-        if (studentInfoDto == null) {
+        if (studentInfoDto==null){
             return null; //Todo 后续改为学号错误或学生信息不存在
         }
         String department = studentInfoDto.getDepartment();
@@ -51,8 +52,8 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users> implements 
         LambdaQueryWrapper<StudentInfoDto> eq = queryWrapper.eq(StudentInfoDto::getSchool, school)
                 .eq(StudentInfoDto::getDepartment, department)
                 .eq(StudentInfoDto::getStrName, strName);
-        if (eq == null) {
-            return null;//Todo 后续改为抛出认证信息错误异常
+        if (eq==null){
+           return  null;//Todo 后续改为抛出认证信息错误异常
         }
         return studentInfoDto;
     }
@@ -60,10 +61,10 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users> implements 
     @Override
     @Transactional
     public Integer insertStudentInfo(StudentInfoDto studentInfoDto) {
-        // 没法直接添加所以考虑使用 BeanUtils 的 copy
-        //1. 生成 StudentInfo 对象
+        //没法直接添加所以考虑使用BeanUtils的copy
+        //1.生成StudentInfo对象
         StudentInfo studentInfo = new StudentInfo();
-        BeanUtils.copyProperties(studentInfoDto, studentInfo);
+        BeanUtils.copyProperties(studentInfoDto,studentInfo);
         int insert = studentInfoMapper.insert(studentInfo);
         return insert;
     }
@@ -73,8 +74,8 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users> implements 
         long strNumber = studentInfoDto.getStrNumber();
         LambdaQueryWrapper<StudentInfo> studentInfoLambdaQueryWrapper = new LambdaQueryWrapper<>();
         LambdaQueryWrapper<StudentInfo> eq = studentInfoLambdaQueryWrapper.eq(StudentInfo::getStrNumber, strNumber);
-        StudentInfo studentInfo = studentInfoMapper.selectOne(eq);
-        return studentInfo;
+            StudentInfo studentInfo = studentInfoMapper.selectOne(eq);
+            return studentInfo;
     }
 
     @Override
@@ -97,8 +98,8 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users> implements 
         LambdaQueryWrapper<StudentInfo> queryWrapper = new LambdaQueryWrapper<>();
         LambdaQueryWrapper<StudentInfo> eq = queryWrapper.eq(StudentInfo::getStrNumber, strNumber);
         StudentInfo studentInfo = studentInfoMapper.selectOne(eq);
-        BeanUtils.copyProperties(updateStudentInfo, studentInfo);
-        int update = studentInfoMapper.update(studentInfo, eq);
+        BeanUtils.copyProperties(updateStudentInfo,studentInfo);
+        int update = studentInfoMapper.update(studentInfo,eq);
         return update;
     }
 
@@ -132,11 +133,28 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users> implements 
 
     @Override
     // 用户登录
-    @Transactional  // 开启事务
+    @Transactional
     public Integer userLoginAuth(Users user) {
         String uuid = helper.GenerateUUID();
         user.setUserId(uuid);
         return usersMapper.insert(user);
+    }
+
+    @Override
+    public User Login(User user) {
+        User user1 = new User();
+        String userId = user.getUserId();
+        LambdaQueryWrapper<Users> queryWrapper = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<Users> eq = queryWrapper.eq(Users::getUserId, userId);
+        Users users1 = usersMapper.selectOne(eq);
+        if (users1!=null){
+            user.setUserId(users1.getUserId());
+            user.setUserName(users1.getUserName());
+            user.setId(users1.getId());
+            return user;
+        }else {
+            return null; //todo 后续改为无此用户异常
+        }
     }
 
     @Override
@@ -171,6 +189,5 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users> implements 
     public void UserUnfollow(String userId) {
 
     }
-
 
 }
