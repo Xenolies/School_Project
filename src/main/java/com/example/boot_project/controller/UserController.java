@@ -81,14 +81,14 @@ public class UserController {
     @GetMapping("/personalInformation/{Id}")
     //TODO: 查询用户详情包括信息和数据, 需要完成
     public UserInfoDtoQuery GetPersonalInformation(@PathVariable long Id) {
-        UserInfoDtoQuery userInfoDtoQuery = userservice.selectUserInfoDto(Id);
         // 设置响应信息
-        return userInfoDtoQuery;
+        return userservice.selectUserInfoDto(Id);
     }
 
     @ApiOperation(" 查询用户个人数据(关注数,粉丝数,文章数) ")
     @GetMapping("/num/{UserId}")
-    //TODO: 获取用户个人数据
+    //TODO: 获取用户个人数据,基本完成,但是还需要修改
+    // @Version: 0.1
     public UserData GetUserNum(@PathVariable String UserId) {
         return userservice.selectUserData(UserId);
     }
